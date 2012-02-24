@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 public class FacebookAuthActivity extends Activity {
 
-	private static final String LOGIN_PATH = "http://localhost/login";
+	private static final String LOGIN_URL = "http://localhost/login";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class FacebookAuthActivity extends Activity {
 		setContentView(R.layout.facebook_auth_activity);
 
 		WebView webView = (WebView) findViewById(R.id.webView);
-		webView.loadUrl(LOGIN_PATH);
+		webView.loadUrl(LOGIN_URL);
 	
 		webView.setWebViewClient(new WebViewClient(){
 			@Override
