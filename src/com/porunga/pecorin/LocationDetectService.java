@@ -21,7 +21,6 @@ public class LocationDetectService extends Service {
   private static final int FIVE_MINUTES = 300000;
   private static final String TAG = "PecorinerLocationDetect";
   
-  private NotificationManager notifyMgr;
   private ThreadGroup svrThreads = new ThreadGroup("ServiceWorker");
   private Positioning positioning;
   private VerificationReceiver verificationReceiver;
@@ -35,7 +34,6 @@ public class LocationDetectService extends Service {
 
     positioning = new Positioning(this, WALKBASE_API_KEY);
     this.registerReceiver(verificationReceiver, new IntentFilter(positioning.getPositioningIntentString()));
-    notifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     
   }
   
@@ -63,7 +61,6 @@ public class LocationDetectService extends Service {
   public void onDestroy() {
     continueScanning = false;
     positioning.finish();
-    notifyMgr.cancelAll();
     this.unregisterReceiver(verificationReceiver);
     super.onDestroy();    
   }
@@ -77,7 +74,6 @@ public class LocationDetectService extends Service {
     PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                                                                 new Intent(this, PecorinActivity.class), 0);
     notification.setLatestEventInfo(this, TAG, message, contentIntent);
-    notifyMgr.notify(0, notification); 
   }
 
   public IBinder onBind(Intent arg0) {
