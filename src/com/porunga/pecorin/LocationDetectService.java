@@ -11,8 +11,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -72,17 +70,6 @@ public class LocationDetectService extends Service {
     positioning.finish();
     this.unregisterReceiver(verificationReceiver);
     super.onDestroy();    
-  }
-
-  private void displayNotificationMessage(String message) {
-    Notification notification =
-        new Notification(R.drawable.pecorin_notify,
-                         message, System.currentTimeMillis());
-    notification.flags = Notification.FLAG_NO_CLEAR;
-        
-    PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                                                                new Intent(this, PecorinActivity.class), 0);
-    notification.setLatestEventInfo(this, TAG, message, contentIntent);
   }
 
   public IBinder onBind(Intent arg0) {
