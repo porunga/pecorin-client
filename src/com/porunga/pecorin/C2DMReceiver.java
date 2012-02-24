@@ -22,14 +22,16 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.widget.Toast;
 
 public class C2DMReceiver extends BroadcastReceiver {
 	
 	final String TAG = "MyAPP_C2DMReceiver";
-	//FacebookAuth‚©‚çæ“¾‚µ‚½facebook_id‚ğg‚¤
-	String facebook_id = "my_facebook_id";
+	//FacebookAuthã‹ã‚‰facebook_idã‚’å–å¾—ã™ã‚‹
+	String facebook_id = null;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -46,12 +48,16 @@ public class C2DMReceiver extends BroadcastReceiver {
     	Log.d(TAG, "registration_id = " + registration_id );
     	    	
 	    if (intent.getStringExtra("error") != null) {
-	        // “o˜^‚Ì¸”sAŒã‚ÅÄ“xƒgƒ‰ƒC‚Ì•K—v‚ ‚èB
+	        // ç™»éŒ²ã®å¤±æ•—ã€å¾Œã§å†åº¦ãƒˆãƒ©ã‚¤ã®å¿…è¦ã‚ã‚Šã€‚
 	    } else if (intent.getStringExtra("unregistered") != null) {
-	        // “o˜^‰ğœ‚ªŠ®—¹A”FØÏ‚İƒZƒ“ƒ_[‚©‚ç‚ÌV‚µ‚¢ƒƒbƒZ[ƒW‚Í‹‘”Û‚³‚ê‚éB
+	        // ç™»éŒ²è§£é™¤ãŒå®Œäº†ã€èªè¨¼æ¸ˆã¿ã‚»ãƒ³ãƒ€ãƒ¼ã‹ã‚‰ã®æ–°ã—ã„ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯æ‹’å¦ã•ã‚Œã‚‹ã€‚
 	    } else if (registration_id != null) {
-		    // “o˜^ ID ‚ğƒƒbƒZ[ƒW‘—M‚·‚éƒT[ƒhƒp[ƒeƒB[‚ÌƒT[ƒo‚É‘—MB
-		    // ‚±‚ê‚Í•ª—£‚³‚ê‚½ƒXƒŒƒbƒh‚Ås‚¤•K—v‚ª‚ ‚éB	    	
+		    // ç™»éŒ² ID ã‚’ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡ã™ã‚‹ã‚µãƒ¼ãƒ‰ãƒ‘ãƒ¼ãƒ†ã‚£ãƒ¼ã®ã‚µãƒ¼ãƒã«é€ä¿¡ã€‚
+		    // ã“ã‚Œã¯åˆ†é›¢ã•ã‚ŒãŸã‚¹ãƒ¬ãƒƒãƒ‰ã§è¡Œã†å¿…è¦ãŒã‚ã‚‹ã€‚
+
+			SharedPreferences sharedpref =  context.getSharedPreferences("preference", context.MODE_PRIVATE);
+			facebook_id = sharedpref.getString("facebook_id", null);
+	    	
 	    	HttpResponse objResponse = postRegistrationId(context.getString(R.string.PecorinServerURL), facebook_id, registration_id);
 			int statusCode = objResponse.getStatusLine().getStatusCode();
 			String result = "";
@@ -66,7 +72,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 	    	Toast.makeText(context, statusCode + ":" + result, Toast.LENGTH_SHORT).show();
 			
 			Log.d(TAG, String.valueOf(statusCode));			
-	       // Š®—¹‚µ‚½‚çA‚·‚×‚Ä‚Ì“o˜^‚ªŠ®—¹‚µ‚½‚±‚Æ‚ğ‰¯‚¦‚Ä‚¨‚­B 
+		    // å®Œäº†ã—ãŸã‚‰ã€ã™ã¹ã¦ã®ç™»éŒ²ãŒå®Œäº†ã—ãŸã“ã¨ã‚’æ†¶ãˆã¦ãŠãã€‚ 
 	    }
 	}
 	
@@ -76,7 +82,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.ic_launcher, message, System.currentTimeMillis());
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		//‚Æ‚è‚ ‚¦‚¸ DeviceRegistrationActivity ‚É‘JˆÚ‚·‚é‚æ‚¤‚É‚µ‚Ä‚¢‚é
+		//ã¨ã‚Šã‚ãˆãš DeviceRegistrationActivity ã‚’å‘¼ã¶ã‚ˆã†ã«ã«ã—ã¦ã„ã‚‹
 		Intent remoteIntent = new Intent(context.getApplicationContext(), DeviceRegistrationActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, remoteIntent, 0);
 		notification.setLatestEventInfo(context.getApplicationContext(), context.getString(R.string.app_name), message, contentIntent);
