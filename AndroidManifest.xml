@@ -47,6 +47,7 @@
 
         <activity android:name="DeviceRegistrationActivity"></activity>
         <activity android:name="FacebookAuthActivity"></activity>
+        <activity android:name="FriendList"></activity>
         
     </application>
 
