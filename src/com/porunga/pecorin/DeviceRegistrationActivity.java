@@ -14,16 +14,15 @@ import android.widget.Toast;
 public class DeviceRegistrationActivity extends Activity {
 	
 	final String TAG = "MyAPP_DeviceRegistrationActivity";
-	//FacebookAuth‚©‚çŽæ“¾‚µ‚½facebook_name, image_url‚ðŽg‚¤
-	final String name = "my_facebook_name";
-	final String image_url = "http://graph.facebook.com/my_facebook_id/picture?type=square";
 	
 	@Override
 	 public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.device_registration);
     	Log.d(TAG, "onCreate");
-		
+		Intent intent = getIntent();
+		String name = intent.getStringExtra("name");
+		String image_url = intent.getStringExtra("image_url");
     	Button button = (Button)findViewById(R.id.registration_button);
     	TextView welcomeMessageTextView = (TextView)findViewById(R.id.welcom_message);
     	TextView facebookNameTextView = (TextView)findViewById(R.id.facebook_name);
