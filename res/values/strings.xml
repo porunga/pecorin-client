@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
     <string name="hello">Hello World, PecorinActivity!</string>
     <string name="app_name">Pecorin-client</string>
+    <string name="email_of_sender">developer@example.com</string>
+    <string name="PecorinServerURL">http://hostname:3000</string>
+    <string name="welcome_message">ようこそ！</string>
+    <string name="registration_button">デバイスの登録！</string>
 
 </resources>
