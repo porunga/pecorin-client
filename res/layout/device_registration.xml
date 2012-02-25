@@ -22,7 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView" />
-
+    <ImageView android:id="@+id/facebook_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+     />
     <Button
         android:id="@+id/registration_button"
         android:layout_width="230dp"

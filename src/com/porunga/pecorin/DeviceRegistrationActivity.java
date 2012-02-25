@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,11 +28,14 @@ public class DeviceRegistrationActivity extends Activity {
     	TextView welcomeMessageTextView = (TextView)findViewById(R.id.welcom_message);
     	TextView facebookNameTextView = (TextView)findViewById(R.id.facebook_name);
     	TextView facebookImageUrlTextView = (TextView)findViewById(R.id.facebook_image_url);
+    	ImageView facebookImage = (ImageView)findViewById(R.id.facebook_image);
     	
     	button.setText(getString(R.string.registration_button));
     	welcomeMessageTextView.setText(getString(R.string.welcome_message));
-    	facebookNameTextView.setText(name + "„Åï„Çì");
+    	facebookNameTextView.setText(name + "Ç≥ÇÒ");
     	facebookImageUrlTextView.setText(image_url);
+    	ImageLoad imgLd = new ImageLoad(facebookImage);
+    	imgLd.execute(image_url);
     	
     	button.setOnClickListener(new OnClickListener(){
     	@Override
