@@ -60,7 +60,8 @@ public class FriendList extends Activity {
 		
 		ArrayList<User> friendList = new ArrayList<User>();
 		
-		friendList = getUserList();
+		String target = "near";
+		friendList = getUserList(target);
 				
 //		For debug
 //		friendList.add(new User("100", "Taro"));
@@ -166,13 +167,13 @@ public class FriendList extends Activity {
 		}
 	}
 
-	private ArrayList<User> getUserList(){
+	private ArrayList<User> getUserList(String target){
 		HttpClient client = new DefaultHttpClient();
 		
 		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
 		String pecorinToken = sharedpref.getString("pecorin_token", "");
 		
-		String url = getString(R.string.PecorinServerURL) + "/users" + "?auth=" + pecorinToken;
+		String url = getString(R.string.PecorinServerURL) + "/users" + "?auth=" + pecorinToken + "&target=" + target;
 		
 		HttpGet request = new HttpGet(url);
 		StringBuilder builder = new StringBuilder();
