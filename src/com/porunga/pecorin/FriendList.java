@@ -52,6 +52,10 @@ public class FriendList extends Activity {
 		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
 		final String myFacebookId = sharedpref.getString("facebook_id", "");
 		
+		if(myFacebookId.equals("")){
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+		}
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		
 		ArrayList<User> friendList = new ArrayList<User>();

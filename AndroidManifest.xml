@@ -38,7 +38,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="LoginActivity"
+        <activity android:name="FriendList"
             android:label="@string/app_name">
             <intent-filter> 
 	            <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,7 @@
 
         <activity android:name="DeviceRegistrationActivity"></activity>
         <activity android:name="FacebookAuthActivity"></activity>
-        <activity android:name="FriendList"></activity>
+        <activity android:name="LoginActivity"></activity>
         <activity android:name="DirectPecoriActivity"></activity>
         <service android:name="LocationDetectService"></service>
     </application>

@@ -76,7 +76,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 			
 			if (statusCode == 201) {
 				Intent newIntent = new Intent(context, FriendList.class);
-				newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				context.startActivity(newIntent);
 			}
 
