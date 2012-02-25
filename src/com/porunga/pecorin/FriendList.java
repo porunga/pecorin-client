@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,8 @@ public class FriendList extends Activity {
 		
 		UserListAdapter adapter = new UserListAdapter(this, R.layout.friend_list_item, friendList);
 		listView.setAdapter(adapter);
+		Intent intent = new Intent(this, LocationDetectService.class);
+		startService(intent);
 	}
 
 	// ListViewカスタマイズ用のArrayAdapter
