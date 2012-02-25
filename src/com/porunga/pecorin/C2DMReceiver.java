@@ -73,6 +73,13 @@ public class C2DMReceiver extends BroadcastReceiver {
 			
 			Log.d(TAG, String.valueOf(statusCode));			
 		    // 完了したら、すべての登録が完了したことを憶えておく。 
+			
+			if (statusCode == 201) {
+				Intent newIntent = new Intent(context, FriendList.class);
+				newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(newIntent);
+			}
+
 	    }
 	}
 	
