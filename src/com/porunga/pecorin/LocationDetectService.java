@@ -27,7 +27,7 @@ import com.walkbase.positioning.data.Recommendation;
 
 public class LocationDetectService extends Service {
   private static final String WALKBASE_API_KEY = "631e3f9af6cf653d96b578b44c4b9b519dd66c9f";
-  private static final int FIVE_MINUTES = 300000;
+  private static final int FIVE_MINUTES = 60000;
   private static final String TAG = "PecorinerLocationDetect";
   private String FACEBOOK_ID = "";
   private String PECORIN_TOKEN = "";
