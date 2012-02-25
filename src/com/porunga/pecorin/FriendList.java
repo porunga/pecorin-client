@@ -133,10 +133,13 @@ public class FriendList extends Activity {
 			}
 		});
 		
-		Intent intent = new Intent(this, LocationDetectService.class);
-		startService(intent);
 	}
-
+  @Override
+  public void onResume() {
+    super.onResume();
+    Intent intent = new Intent(this, LocationDetectService.class);
+    startService(intent);
+  }
 	// ListViewカスタマイズ用のArrayAdapter
 	public class UserListAdapter extends ArrayAdapter<User> {
 		private LayoutInflater inflater;
