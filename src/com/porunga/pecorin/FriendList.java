@@ -52,6 +52,10 @@ public class FriendList extends Activity {
 		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
 		final String myFacebookId = sharedpref.getString("facebook_id", "");
 		
+		if(myFacebookId.equals("")){
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivity(intent);
+		}
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		
 		ArrayList<User> friendList = new ArrayList<User>();
@@ -88,7 +92,16 @@ public class FriendList extends Activity {
 				pecoriButton1.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						postPecori(myFacebookId, pecoreeFacebookId);					
+						String type = "c2dm";
+						Level level = postPecori(myFacebookId, pecoreeFacebookId, type);
+						String currentPoint = level.getCurrentPoint();
+						String leveledUp = level.getLeveledUp();
+						Toast.makeText(getApplicationContext(), "Your Point is " + currentPoint, Toast.LENGTH_SHORT).show();
+						if (leveledUp.equals("true")){
+							String levelName = level.getLevelName();
+							Toast.makeText(getApplicationContext(), "Congratulations!!! \n New Badge Unlocked!\n\n" + "[ " + levelName + " ]", Toast.LENGTH_LONG).show();
+							
+						}
 					}
 				});
 
@@ -192,27 +205,28 @@ public class FriendList extends Activity {
 		}
 		return dataList;
 	}
+	
+	private Level postPecori(String pecorer_facebook_id, String pecoree_facebook_id, String type) {
 
-	private JSONObject postPecori(String pecorer_facebook_id, String pecoree_facebook_id){
-		
 		String ServerURL = getString(R.string.PecorinServerURL);
 		HttpResponse objResponse = null;
 		String api = ServerURL + "/pecori";
-		
+
 		HttpClient objHttp = new DefaultHttpClient();
 		HttpPost objPost = new HttpPost(api);
-				
-		final List <NameValuePair> params = new ArrayList <NameValuePair>();
-        params.add(new BasicNameValuePair("pecorer_facebook_id", pecorer_facebook_id));
-        params.add(new BasicNameValuePair("pecoree_facebook_id", pecoree_facebook_id));
+
+		final List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("pecorer_facebook_id", pecorer_facebook_id));
+		params.add(new BasicNameValuePair("pecoree_facebook_id", pecoree_facebook_id));
+		params.add(new BasicNameValuePair("type", type));
 
 		StringBuilder builder = new StringBuilder();
 
-        try {
-        	
+		try {
+
 			objPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
 			objResponse = objHttp.execute(objPost);
-			
+
 			int statusCode = objResponse.getStatusLine().getStatusCode();
 			if (statusCode == HttpURLConnection.HTTP_OK) {
 				HttpEntity entity = objResponse.getEntity();
@@ -230,16 +244,25 @@ public class FriendList extends Activity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        
+
 		JSONObject json = null;
-		String result =  builder.toString();
+		String result = builder.toString();
+		Level level = null;
 		try {
 			json = new JSONObject(result);
+			String currentPoint = json.getString("current_point");
+			String leveledUp = json.getString("leveled_up");
+			String levelName = json.getString("level_name");
+			String imageUrl = json.getString("image_url");
+			String badgeType = json.getString("badge_type");
+
+			level = new Level(currentPoint, levelName, imageUrl, badgeType, leveledUp);
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return json;		
+		return level;
 	}
-	
+
 }
