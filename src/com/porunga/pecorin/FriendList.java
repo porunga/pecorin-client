@@ -67,7 +67,7 @@ public class FriendList extends Activity {
 		pecoriButton2.setText(getString((R.string.pecori_button2)));
 
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(R.drawable.ic_launcher).setTitle("ぺこりしよう！").setCancelable(true).setView(inputView);
+		builder.setIcon(R.drawable.ic_launcher).setTitle("ぺこりしよう!!").setCancelable(true).setView(inputView);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -91,8 +91,10 @@ public class FriendList extends Activity {
 					@Override
 					public void onClick(View v) {
 						// とりあえずdialogを表示
-						Toast.makeText(getApplicationContext(), myFacebookId, Toast.LENGTH_SHORT).show();
-						Toast.makeText(getApplicationContext(), "Name: " + pecoreeName + "(ID: " + pecoreeFacebookId + ")", Toast.LENGTH_SHORT).show();
+						//Toast.makeText(getApplicationContext(), myFacebookId, Toast.LENGTH_SHORT).show();
+						//Toast.makeText(getApplicationContext(), "Name: " + pecoreeName + "(ID: " + pecoreeFacebookId + ")", Toast.LENGTH_SHORT).show();
+						Intent intent = new Intent(FriendList.this, DirectPecoriActivity.class);
+						startActivity(intent);
 					}
 				});
 

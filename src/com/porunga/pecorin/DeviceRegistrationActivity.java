@@ -32,7 +32,7 @@ public class DeviceRegistrationActivity extends Activity {
     	
     	button.setText(getString(R.string.registration_button));
     	welcomeMessageTextView.setText(getString(R.string.welcome_message));
-    	facebookNameTextView.setText(name + "Ç≥ÇÒ");
+    	facebookNameTextView.setText(name + "„Åï„Çì");
     	facebookImageUrlTextView.setText(image_url);
     	ImageLoad imgLd = new ImageLoad(facebookImage);
     	imgLd.execute(image_url);
