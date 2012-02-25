@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -20,14 +21,13 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.walkbase.positioning.Positioning;
 import com.walkbase.positioning.data.Recommendation;
 
 public class LocationDetectService extends Service {
   private static final String WALKBASE_API_KEY = "631e3f9af6cf653d96b578b44c4b9b519dd66c9f";
-  private static final int FIVE_MINUTES = 300000;
+  private static final int FIVE_MINUTES = 60000;
   private static final String TAG = "PecorinerLocationDetect";
   private String FACEBOOK_ID = "";
   private String PECORIN_TOKEN = "";
@@ -44,6 +44,7 @@ public class LocationDetectService extends Service {
     this.continueScanning = true;
 
     positioning = new Positioning(this, WALKBASE_API_KEY);
+    verificationReceiver = new VerificationReceiver();
     this.registerReceiver(verificationReceiver, new IntentFilter(positioning.getPositioningIntentString()));
     SharedPreferences preferences = getSharedPreferences("preference", Activity.MODE_PRIVATE);
     FACEBOOK_ID = preferences.getString("facebook_id", "");
@@ -90,9 +91,9 @@ public class LocationDetectService extends Service {
         recommendations = positioning.getRecommendations();
         if(recommendations != null || recommendations.size() > 0){
           Recommendation recommend = (Recommendation)recommendations.get(0);
-          //‚±‚ÌlocationId‚ğƒT[ƒo‚É‘—‚éH
+          //ï¿½ï¿½ï¿½ï¿½locationIdï¿½ï¿½ï¿½Tï¿½[ï¿½oï¿½É‘ï¿½ï¿½ï¿½H
           String locationId = recommend.getLocationId();
-          HttpPut method = new HttpPut(R.string.PecorinServerURL+"/user/"+FACEBOOK_ID+"/location");
+          HttpPut method = new HttpPut(getString(R.string.PecorinServerURL)+"/user/"+FACEBOOK_ID+"/location");
           ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
           params.add(new BasicNameValuePair("current_location_id", locationId));
           params.add(new BasicNameValuePair("facebook_id", FACEBOOK_ID));
@@ -100,7 +101,9 @@ public class LocationDetectService extends Service {
           try {
             method.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            httpClient.execute(method);
+            HttpResponse res = httpClient.execute(method);
+            Log.i(TAG, "locationId:"+locationId);
+            Log.i(TAG, "response:"+res.getEntity().toString());
           } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
