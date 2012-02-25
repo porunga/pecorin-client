@@ -48,8 +48,15 @@
 
         <activity android:name="DeviceRegistrationActivity"></activity>
         <activity android:name="FacebookAuthActivity"></activity>
+        <activity android:name="FriendList"></activity>
+        <activity android:name="DirectPecoriActivity">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
         <activity android:name="LoginActivity"></activity>
-        <activity android:name="DirectPecoriActivity"></activity>
         <service android:name="LocationDetectService"></service>
     </application>
 

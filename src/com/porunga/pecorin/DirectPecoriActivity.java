@@ -13,6 +13,9 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class DirectPecoriActivity extends Activity {
@@ -23,12 +26,21 @@ public class DirectPecoriActivity extends Activity {
   private IntentFilter[] mWriteTagFilters;
   private boolean mResumed;
   private TextView mMessage;
+  private Button mButton;
   
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.direct_pecori);
     mMessage = (TextView)findViewById(R.id.pecori_message);
+    mButton = (Button)findViewById(R.id.back_to_friends_list);
+    mButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Intent intent = new Intent(getBaseContext(), FriendList.class);
+        startActivity(intent);
+      }
+    });
     
     mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -124,6 +136,5 @@ public class DirectPecoriActivity extends Activity {
     return new NdefMessage(new NdefRecord[] {
         textRecord
     });
-  }
-  
+  }  
 }
