@@ -9,6 +9,7 @@
     <string name="registration_button">デバイスの登録！</string>
     <string name="pecori_button1">ぺこりする</string>
     <string name="pecori_button2">ダイレクトぺこりする</string>
+    <string name="pecori_button3">ぺこらない</string>
     <string name="direct_pecori_message">タッチでダイレクトぺこり!!</string>
     
 </resources>

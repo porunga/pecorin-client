@@ -77,9 +77,12 @@ public class FriendList extends Activity {
 		final Button pecoriButton2 = (Button) inputView.findViewById(R.id.pecori_button2);
 		pecoriButton2.setText(getString((R.string.pecori_button2)));
 
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setIcon(R.drawable.ic_launcher).setTitle("ぺこりしよう!!").setCancelable(true).setView(inputView);
+		final Button pecoriButton3 = (Button) inputView.findViewById(R.id.pecori_button3);
+		pecoriButton3.setText(getString((R.string.pecori_button3)));
 
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(R.drawable.ic_launcher).setTitle("ぺこりしよう!!").setCancelable(true).setView(inputView);
+		final AlertDialog dialog = builder.create();
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,6 +95,7 @@ public class FriendList extends Activity {
 				pecoriButton1.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
+						dialog.dismiss();
 						String type = "c2dm";
 						Level level = postPecori(myFacebookId, pecoreeFacebookId, type);
 						String currentPoint = level.getCurrentPoint();
@@ -108,6 +112,7 @@ public class FriendList extends Activity {
 				pecoriButton2.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
+						dialog.dismiss();
 						// とりあえずdialogを表示
 						//Toast.makeText(getApplicationContext(), myFacebookId, Toast.LENGTH_SHORT).show();
 						//Toast.makeText(getApplicationContext(), "Name: " + pecoreeName + "(ID: " + pecoreeFacebookId + ")", Toast.LENGTH_SHORT).show();
@@ -115,8 +120,16 @@ public class FriendList extends Activity {
 						startActivity(intent);
 					}
 				});
+				
+				pecoriButton3.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
 
-				builder.show();
+				dialog.show();
+				
 			}
 		});
 		
