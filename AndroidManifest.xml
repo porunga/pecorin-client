@@ -50,6 +50,7 @@
         <activity android:name="FacebookAuthActivity"></activity>
         <activity android:name="FriendList"></activity>
         <activity android:name="DirectPecoriActivity"></activity>
+        <service android:name="LocationDetectService"></service>
     </application>
 
 </manifest>
