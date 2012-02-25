@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
@@ -25,9 +26,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FriendList extends Activity {
 	
@@ -36,6 +41,9 @@ public class FriendList extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.friend_list_activity);
+		
+		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
+		final String myFacebookId = sharedpref.getString("facebook_id", "");
 		
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		
@@ -49,6 +57,49 @@ public class FriendList extends Activity {
 		
 		UserListAdapter adapter = new UserListAdapter(this, R.layout.friend_list_item, friendList);
 		listView.setAdapter(adapter);
+		
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View inputView = factory.inflate(R.layout.pecori_dialog, null);
+		final Button pecoriButton1 = (Button) inputView.findViewById(R.id.pecori_button1);
+		pecoriButton1.setText(getString((R.string.pecori_button1)));
+
+		final Button pecoriButton2 = (Button) inputView.findViewById(R.id.pecori_button2);
+		pecoriButton2.setText(getString((R.string.pecori_button2)));
+
+		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(R.drawable.ic_launcher).setTitle("ぺこりしよう！").setCancelable(true).setView(inputView);
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				ListView listView = (ListView) parent;
+				User item = (User) listView.getItemAtPosition(position);
+
+				final String pecoreeFacebookId = item.getFacebookId();
+				final String pecoreeName = item.getName();
+
+				pecoriButton1.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// とりあえずdialogを表示
+						Toast.makeText(getApplicationContext(), myFacebookId, Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), "Name: " + pecoreeName + "(ID: " + pecoreeFacebookId + ")", Toast.LENGTH_SHORT).show();
+					}
+				});
+
+				pecoriButton2.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// とりあえずdialogを表示
+						Toast.makeText(getApplicationContext(), myFacebookId, Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), "Name: " + pecoreeName + "(ID: " + pecoreeFacebookId + ")", Toast.LENGTH_SHORT).show();
+					}
+				});
+
+				builder.show();
+			}
+		});
+		
 		Intent intent = new Intent(this, LocationDetectService.class);
 		startService(intent);
 	}
