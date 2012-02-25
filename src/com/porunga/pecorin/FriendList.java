@@ -4,15 +4,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,9 +88,7 @@ public class FriendList extends Activity {
 				pecoriButton1.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						// とりあえずdialogを表示
-						Toast.makeText(getApplicationContext(), myFacebookId, Toast.LENGTH_SHORT).show();
-						Toast.makeText(getApplicationContext(), "Name: " + pecoreeName + "(ID: " + pecoreeFacebookId + ")", Toast.LENGTH_SHORT).show();
+						postPecori(myFacebookId, pecoreeFacebookId);					
 					}
 				});
 
@@ -186,4 +191,53 @@ public class FriendList extends Activity {
 		return dataList;
 	}
 
+	private JSONObject postPecori(String pecorer_facebook_id, String pecoree_facebook_id){
+		
+		String ServerURL = getString(R.string.PecorinServerURL);
+		HttpResponse objResponse = null;
+		String api = ServerURL + "/pecori";
+		
+		HttpClient objHttp = new DefaultHttpClient();
+		HttpPost objPost = new HttpPost(api);
+				
+		final List <NameValuePair> params = new ArrayList <NameValuePair>();
+        params.add(new BasicNameValuePair("pecorer_facebook_id", pecorer_facebook_id));
+        params.add(new BasicNameValuePair("pecoree_facebook_id", pecoree_facebook_id));
+
+		StringBuilder builder = new StringBuilder();
+
+        try {
+        	
+			objPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+			objResponse = objHttp.execute(objPost);
+			
+			int statusCode = objResponse.getStatusLine().getStatusCode();
+			if (statusCode == HttpURLConnection.HTTP_OK) {
+				HttpEntity entity = objResponse.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+			}
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+		JSONObject json = null;
+		String result =  builder.toString();
+		try {
+			json = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json;		
+	}
+	
 }
