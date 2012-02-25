@@ -7,5 +7,7 @@
     <string name="PecorinServerURL">http://hostname:3000</string>
     <string name="welcome_message">ようこそ！</string>
     <string name="registration_button">デバイスの登録！</string>
+    <string name="pecori_button1">ぺこりする</string>
+    <string name="pecori_button2">ダイレクトぺこりする</string>
 
 </resources>
