@@ -11,13 +11,16 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.walkbase.positioning.Positioning;
 import com.walkbase.positioning.data.Recommendation;
@@ -26,7 +29,8 @@ public class LocationDetectService extends Service {
   private static final String WALKBASE_API_KEY = "631e3f9af6cf653d96b578b44c4b9b519dd66c9f";
   private static final int FIVE_MINUTES = 300000;
   private static final String TAG = "PecorinerLocationDetect";
-  private static final String LOCATION_ID_UPDATE_URL = "";
+  private String FACEBOOK_ID = "";
+  private String PECORIN_TOKEN = "";
   
   private ThreadGroup svrThreads = new ThreadGroup("ServiceWorker");
   private Positioning positioning;
@@ -34,20 +38,23 @@ public class LocationDetectService extends Service {
   private ArrayList<Recommendation> recommendations;
 
   private boolean continueScanning;
-
+  
   public void onCreate() {
     super.onCreate();
     this.continueScanning = true;
 
     positioning = new Positioning(this, WALKBASE_API_KEY);
     this.registerReceiver(verificationReceiver, new IntentFilter(positioning.getPositioningIntentString()));
-    
+    SharedPreferences preferences = getSharedPreferences("preference", Activity.MODE_PRIVATE);
+    FACEBOOK_ID = preferences.getString("facebook_id", "");
+    PECORIN_TOKEN = preferences.getString("pecorin_token", "");
   }
   
   public int onStartCommand(Intent intent, int flags, int startId) {
     super.onStartCommand(intent, flags, startId);
         
     new Thread(svrThreads, new ServiceWorker(), "PecorinerLocationDetect").start();
+    //Toast.makeText(this, "start calling", Toast.LENGTH_SHORT).show();
     return START_STICKY; 
   }
 
@@ -63,7 +70,7 @@ public class LocationDetectService extends Service {
         Log.v("LocationDetectService",e.getMessage());
       }
     }
-  }
+  } 
 
   public void onDestroy() {
     continueScanning = false;
@@ -85,9 +92,11 @@ public class LocationDetectService extends Service {
           Recommendation recommend = (Recommendation)recommendations.get(0);
           //このlocationIdをサーバに送る？
           String locationId = recommend.getLocationId();
-          HttpPut method = new HttpPut(LOCATION_ID_UPDATE_URL);
+          HttpPut method = new HttpPut(R.string.PecorinServerURL+"/user/"+FACEBOOK_ID+"/location");
           ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
           params.add(new BasicNameValuePair("current_location_id", locationId));
+          params.add(new BasicNameValuePair("facebook_id", FACEBOOK_ID));
+          params.add(new BasicNameValuePair("pecorin_token", PECORIN_TOKEN));
           try {
             method.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
             DefaultHttpClient httpClient = new DefaultHttpClient();
