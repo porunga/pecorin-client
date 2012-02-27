@@ -91,7 +91,6 @@ public class LocationDetectService extends Service {
         recommendations = positioning.getRecommendations();
         if(recommendations != null || recommendations.size() > 0){
           Recommendation recommend = (Recommendation)recommendations.get(0);
-          //����locationId���T�[�o�ɑ���H
           String locationId = recommend.getLocationId();
           HttpPut method = new HttpPut(getString(R.string.PecorinServerURL)+"/user/"+FACEBOOK_ID+"/location");
           ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
