@@ -27,13 +27,13 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,19 +42,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FriendList extends Activity {
+
+	private User mPecorer;
+	private String mPecorinServerURL;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.friend_list_activity);
-		
+		mPecorinServerURL = getString(R.string.PecorinServerURL);
+
 		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
 		final String myFacebookId = sharedpref.getString("facebook_id", "");
-		
 		if(myFacebookId.equals("")){
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
+		} else {
+			mPecorer = new User(myFacebookId);
 		}
 		ListView listView = (ListView) findViewById(R.id.listView1);
 		
@@ -98,7 +103,7 @@ public class FriendList extends Activity {
 					public void onClick(View v) {
 						dialog.dismiss();
 						String type = "c2dm";
-						Level level = postPecori(myFacebookId, pecoreeFacebookId, type);
+						Level level = mPecorer.pecori(pecoreeFacebookId, type, mPecorinServerURL);
 						String currentPoint = level.getCurrentPoint();
 						String leveledUp = level.getLeveledUp();
 						Toast.makeText(getApplicationContext(), "Your Point is " + currentPoint, Toast.LENGTH_SHORT).show();
@@ -176,7 +181,7 @@ public class FriendList extends Activity {
 		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
 		String pecorinToken = sharedpref.getString("pecorin_token", "");
 		
-		String url = getString(R.string.PecorinServerURL) + "/users" + "?auth=" + pecorinToken + "&target=" + target;
+		String url = mPecorinServerURL + "/users" + "?auth=" + pecorinToken + "&target=" + target;
 		
 		HttpGet request = new HttpGet(url);
 		StringBuilder builder = new StringBuilder();
@@ -223,63 +228,4 @@ public class FriendList extends Activity {
 		return dataList;
 	}
 	
-	private Level postPecori(String pecorer_facebook_id, String pecoree_facebook_id, String type) {
-
-		String ServerURL = getString(R.string.PecorinServerURL);
-		HttpResponse objResponse = null;
-		String api = ServerURL + "/pecori";
-
-		HttpClient objHttp = new DefaultHttpClient();
-		HttpPost objPost = new HttpPost(api);
-
-		final List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("pecorer_facebook_id", pecorer_facebook_id));
-		params.add(new BasicNameValuePair("pecoree_facebook_id", pecoree_facebook_id));
-		params.add(new BasicNameValuePair("type", type));
-
-		StringBuilder builder = new StringBuilder();
-
-		try {
-
-			objPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-			objResponse = objHttp.execute(objPost);
-
-			int statusCode = objResponse.getStatusLine().getStatusCode();
-			if (statusCode == HttpURLConnection.HTTP_OK) {
-				HttpEntity entity = objResponse.getEntity();
-				InputStream content = entity.getContent();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					builder.append(line);
-				}
-			}
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		JSONObject json = null;
-		String result = builder.toString();
-		Level level = null;
-		try {
-			json = new JSONObject(result);
-			String currentPoint = json.getString("current_point");
-			String leveledUp = json.getString("leveled_up");
-			String levelName = json.getString("level_name");
-			String imageUrl = json.getString("image_url");
-			String badgeType = json.getString("badge_type");
-
-			level = new Level(currentPoint, levelName, imageUrl, badgeType, leveledUp);
-
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return level;
-	}
-
 }
