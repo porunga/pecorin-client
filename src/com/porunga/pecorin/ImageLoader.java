@@ -15,9 +15,9 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
-public class ImageLoad extends AsyncTask<String, Void, Bitmap> {
+public class ImageLoader extends AsyncTask<String, Void, Bitmap> {
   private ImageView imageView;
-  public ImageLoad(ImageView imageView) {
+  public ImageLoader(ImageView imageView) {
     this.imageView = imageView;
   }
 
