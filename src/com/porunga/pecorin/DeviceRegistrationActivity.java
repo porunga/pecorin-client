@@ -34,7 +34,7 @@ public class DeviceRegistrationActivity extends Activity {
     	welcomeMessageTextView.setText(getString(R.string.welcome_message));
     	facebookNameTextView.setText(name + "さん");
     	facebookImageUrlTextView.setText(image_url);
-    	ImageLoad imgLd = new ImageLoad(facebookImage);
+    	ImageLoader imgLd = new ImageLoader(facebookImage);
     	imgLd.execute(image_url);
     	
     	button.setOnClickListener(new OnClickListener(){
