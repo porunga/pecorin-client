@@ -13,14 +13,14 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.porunga.pecorin.ssl.HttpManager;
 
 public class User {
 
@@ -53,7 +53,7 @@ public class User {
 		HttpResponse objResponse = null;
 		String api = pecorinServerUrl + "/pecori";
 
-		HttpClient objHttp = new DefaultHttpClient();
+//		HttpClient objHttp = new DefaultHttpClient();
 		HttpPost objPost = new HttpPost(api);
 
 		final List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -66,7 +66,8 @@ public class User {
 		try {
 
 			objPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-			objResponse = objHttp.execute(objPost);
+//			objResponse = objHttp.execute(objPost);
+			objResponse = HttpManager.execute(objPost);
 
 			int statusCode = objResponse.getStatusLine().getStatusCode();
 			if (statusCode == HttpURLConnection.HTTP_OK) {
