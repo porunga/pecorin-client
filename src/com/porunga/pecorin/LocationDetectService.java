@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.porunga.pecorin.ssl.HttpManager;
 import com.walkbase.positioning.Positioning;
 import com.walkbase.positioning.data.Recommendation;
 
@@ -92,6 +93,7 @@ public class LocationDetectService extends Service {
         if(recommendations != null || recommendations.size() > 0){
           Recommendation recommend = (Recommendation)recommendations.get(0);
           String locationId = recommend.getLocationId();
+//String locationId = "dummy";
           HttpPut method = new HttpPut(getString(R.string.PecorinServerURL)+"/user/"+FACEBOOK_ID+"/location");
           ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
           params.add(new BasicNameValuePair("current_location_id", locationId));
@@ -99,8 +101,9 @@ public class LocationDetectService extends Service {
           params.add(new BasicNameValuePair("pecorin_token", PECORIN_TOKEN));
           try {
             method.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpResponse res = httpClient.execute(method);
+//            DefaultHttpClient httpClient = new DefaultHttpClient();
+//            HttpResponse res = httpClient.execute(method);
+            HttpResponse res = HttpManager.execute(method);
             Log.i(TAG, "locationId:"+locationId);
             Log.i(TAG, "response:"+res.getEntity().toString());
           } catch (UnsupportedEncodingException e) {

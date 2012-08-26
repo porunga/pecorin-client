@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.porunga.pecorin.ssl.HttpManager;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -176,7 +178,7 @@ public class FriendList extends Activity {
 	}
 
 	private ArrayList<User> getUserList(String target){
-		HttpClient client = new DefaultHttpClient();
+//		HttpClient client = new DefaultHttpClient();
 		
 		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
 		String pecorinToken = sharedpref.getString("pecorin_token", "");
@@ -187,7 +189,8 @@ public class FriendList extends Activity {
 		StringBuilder builder = new StringBuilder();
 
 		try {
-			HttpResponse response = client.execute(request);
+//			HttpResponse response = client.execute(request);
+			HttpResponse response = HttpManager.execute(request);
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode == HttpURLConnection.HTTP_OK) {
 				HttpEntity entity = response.getEntity();

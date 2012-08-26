@@ -16,6 +16,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
+import com.porunga.pecorin.ssl.HttpManager;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -103,7 +105,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 //		String api = ServerURL + "/user/" + facebook_id + "/device_registration/" + registration_id;
 		String api = ServerURL + "/device_registrations";
 		
-		HttpClient objHttp = new DefaultHttpClient();
+//		HttpClient objHttp = new DefaultHttpClient();
 		HttpPost objPost = new HttpPost(api);
 				
 		final List <NameValuePair> params = new ArrayList <NameValuePair>();
@@ -113,7 +115,8 @@ public class C2DMReceiver extends BroadcastReceiver {
         try {
         	
 			objPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-			objResponse = objHttp.execute(objPost);
+//			objResponse = objHttp.execute(objPost);
+            objResponse = HttpManager.execute(objPost);
 
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();

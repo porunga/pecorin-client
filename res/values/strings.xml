@@ -4,7 +4,7 @@
     <string name="hello">Hello World, PecorinActivity!</string>
     <string name="app_name">Pecorin-client</string>
     <string name="email_of_sender">developer@example.com</string>
-    <string name="PecorinServerURL">http://ec2-175-41-233-225.ap-northeast-1.compute.amazonaws.com:3000</string>
+    <string name="PecorinServerURL">https://ec2-54-248-17-131.ap-northeast-1.compute.amazonaws.com</string>
     <string name="welcome_message">ようこそ！</string>
     <string name="registration_button">デバイスの登録！</string>
     <string name="pecori_button1">ぺこりする</string>

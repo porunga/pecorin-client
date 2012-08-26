@@ -10,6 +10,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.porunga.pecorin.ssl.HttpManager;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -24,9 +26,10 @@ public class ImageLoader extends AsyncTask<String, Void, Bitmap> {
   @Override
   protected Bitmap doInBackground(String... urls) {
     Bitmap image = null;
-    DefaultHttpClient dhc = new DefaultHttpClient();
+//    DefaultHttpClient dhc = new DefaultHttpClient();
     try {
-      HttpResponse res = dhc.execute(new HttpGet(urls[0]));
+//      HttpResponse res = dhc.execute(new HttpGet(urls[0]));
+      HttpResponse res = HttpManager.execute(new HttpGet(urls[0]));
       if(res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
         HttpEntity entity = res.getEntity();
         InputStream in = entity.getContent();
