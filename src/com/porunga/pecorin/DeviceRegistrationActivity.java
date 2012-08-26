@@ -40,20 +40,20 @@ public class DeviceRegistrationActivity extends Activity {
     	button.setOnClickListener(new OnClickListener(){
     	@Override
    		public void onClick(View v) {
-				registeringForC2DM();
+				registeringForGCM();
 	    		Toast.makeText(getApplicationContext(), "registering", Toast.LENGTH_SHORT).show();
     		}});	
 	}
-	
-    private void registeringForC2DM(){
-    	Log.d(TAG, "start");
-        Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
-        registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
-        registrationIntent.putExtra("sender", getString(R.string.email_of_sender));
-        startService(registrationIntent);
-    }
 
-    private void unRegisteringFromC2DM(){
+	private void registeringForGCM() {
+    	Log.d(TAG, "start");
+    	Intent registrationIntent = new Intent("com.google.android.c2dm.intent.REGISTER");
+    	registrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
+    	registrationIntent.putExtra("sender", getString(R.string.senderId));
+    	startService(registrationIntent);
+	}
+	
+    private void unRegisteringFromGCM(){
         Intent unRegistrationIntent = new Intent("com.google.android.c2dm.intent.UNREGISTER");
         unRegistrationIntent.putExtra("app", PendingIntent.getBroadcast(this, 0, new Intent(), 0));
         startService(unRegistrationIntent);
