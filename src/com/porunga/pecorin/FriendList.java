@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -108,8 +111,7 @@ public class FriendList extends Activity {
 						String leveledUp = level.getLeveledUp();
 						Toast.makeText(getApplicationContext(), "Your Point is " + currentPoint, Toast.LENGTH_SHORT).show();
 						if (leveledUp.equals("true")){
-							String levelName = level.getLevelName();
-							Toast.makeText(getApplicationContext(), "Congratulations!!! \n New Badge Unlocked!\n\n" + "[ " + levelName + " ]", Toast.LENGTH_LONG).show();
+							showBadgeDialog(level);
 							
 						}
 					}
@@ -140,6 +142,31 @@ public class FriendList extends Activity {
 		});
 		
 	}
+	
+	private void showBadgeDialog(Level level){
+		String levelName = level.getLevelName();
+		Toast.makeText(getApplicationContext(), "Congratulations!!! \n New Badge Unlocked!\n\n" + "[ " + levelName + " ]", Toast.LENGTH_LONG).show();
+		View dialogView = getLayoutInflater().inflate(R.layout.badge_dialog, null);
+		ImageView badgeImage = (ImageView)dialogView.findViewById(R.id.badgeImage);
+		TextView badgeName = (TextView)dialogView.findViewById(R.id.badgeName);
+		badgeName.setText("Level: " + levelName);
+		AlertDialog.Builder builder = new AlertDialog.Builder(FriendList.this);
+		builder.setTitle("New Badge UnLocked!!");
+		builder.setView(dialogView);
+		builder.setPositiveButton("OK", new android.content.DialogInterface.OnClickListener(){
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+			
+		});
+		ImageLoader loader = new ImageLoader(badgeImage);
+		loader.execute(level.getImageUrl());
+		builder.create().show();
+	
+	}
+	
   @Override
   public void onResume() {
     super.onResume();
