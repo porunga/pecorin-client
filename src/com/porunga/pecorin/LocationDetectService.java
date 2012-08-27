@@ -89,7 +89,7 @@ public class LocationDetectService extends Service {
       int intentType = intent.getIntExtra("type",0);
       if (intentType == Positioning.NORMAL_RECOMMENDATION) {
         recommendations = positioning.getRecommendations();
-        if(recommendations != null || recommendations.size() > 0){
+        if(recommendations != null && recommendations.size() > 0){
           Recommendation recommend = (Recommendation)recommendations.get(0);
           String locationId = recommend.getLocationId();
           HttpPut method = new HttpPut(getString(R.string.PecorinServerURL)+"/user/"+FACEBOOK_ID+"/location");
