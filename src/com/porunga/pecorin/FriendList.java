@@ -65,9 +65,19 @@ public class FriendList extends Activity {
 		
 		ArrayList<User> friendList = new ArrayList<User>();
 		
-		String target = "near";
-		friendList = getUserList(target);
-				
+		String mode = "";
+		String target = ""; // target = "near";
+
+		Intent intent = getIntent();
+		mode = intent.getStringExtra("mode");
+		if ("reply".equals(mode)) {
+			mode = "reply";
+		} else {
+			friendList = getUserList("", "");
+		}
+
+		friendList = getUserList(mode, target);
+
 //		For debug
 //		friendList.add(new User("100", "Taro"));
 //		friendList.add(new User("200", "Jiro"));
@@ -140,6 +150,7 @@ public class FriendList extends Activity {
 		});
 		
 	}
+	
   @Override
   public void onResume() {
     super.onResume();
@@ -175,13 +186,13 @@ public class FriendList extends Activity {
 		}
 	}
 
-	private ArrayList<User> getUserList(String target){
+	private ArrayList<User> getUserList(String mode, String target){
 		HttpClient client = new DefaultHttpClient();
 		
 		SharedPreferences sharedpref =  getSharedPreferences("preference", MODE_PRIVATE);
 		String pecorinToken = sharedpref.getString("pecorin_token", "");
 		
-		String url = mPecorinServerURL + "/users" + "?auth=" + pecorinToken + "&target=" + target;
+		String url = mPecorinServerURL + "/users" + "?auth=" + pecorinToken + "&target=" + target + "&mode=" + mode;
 		
 		HttpGet request = new HttpGet(url);
 		StringBuilder builder = new StringBuilder();

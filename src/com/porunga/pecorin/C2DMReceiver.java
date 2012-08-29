@@ -89,8 +89,8 @@ public class C2DMReceiver extends BroadcastReceiver {
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.ic_launcher, message, System.currentTimeMillis());
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		//とりあえず DeviceRegistrationActivity を呼ぶようににしている
 		Intent remoteIntent = new Intent(context.getApplicationContext(), FriendList.class);
+		remoteIntent.putExtra("mode","reply");
 		PendingIntent contentIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, remoteIntent, 0);
 		notification.setLatestEventInfo(context.getApplicationContext(), context.getString(R.string.app_name), message, contentIntent);
 		notificationManager.notify(R.string.app_name, notification);
